@@ -1,0 +1,35 @@
+syntax = "proto3";
+package api;
+
+message ActivityRequest {
+	uint32 amount = 1;
+	string user = 2;
+}
+
+message ActivityResponse {
+	uint32 entries = 1;
+	int32 elapsed_time = 2;
+}
+
+message ActivityItem {
+	string name = 1;
+	map<string, uint32> activities = 2;
+}
+
+message ActivityKeys {
+	repeated string keys = 1;
+}
+
+message KeyRequest {}
+
+message DeleteRequest {
+	string name = 1;
+}
+
+service ActivityService {
+	rpc GetActivities(ActivityRequest) returns (stream ActivityItem) {}
+	rpc WriteMembers(stream ActivityItem) returns (ActivityResponse) {}
+	rpc UpdateMembers(stream ActivityItem) returns (ActivityResponse) {}
+	rpc DeleteMembers(stream DeleteRequest) returns (ActivityResponse) {}
+	rpc GetKeys(KeyRequest) returns (ActivityKeys) {}
+}

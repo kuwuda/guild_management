@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<title></title>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="/static/favicon.png">
+		<link rel="stylesheet" href="/static/index.css">
+	</head>
+	<body>
+		<main>
+			<table>
+				<tr>
+					<th>Name</th>
+					{{ $indZero := index . 0}}
+					{{ range $key, $value := $indZero.Activities }}
+					<th>{{$key}}</th>
+					{{ end }}
+				</tr>
+				{{ range . }}
+				<tr>
+					<td>{{ .Name }}</td>
+					{{range $value := .Activities }}
+					<td>{{$value}}</td>
+					{{ end }}
+				</tr>
+				{{ end }}
+			</table>
+			<details>
+				<summary>Update</summary>
+				<table>
+					<tr>
+						<th>Name</th>
+						{{ $indZero := index . 0}}
+						{{ range $key, $value := $indZero.Activities }}
+						<th>{{$key}}</th>
+						{{ end }}
+					</tr>
+					{{ range . }}
+					<tr>
+						<form action="/update" method="post">
+							<td><input type="text" name="name" value="{{.Name}}" /></td>
+							{{range $key, $value := .Activities }}
+							<td><input type="text" name="{{$key}}" value="{{$value}}" /></td>
+							{{end}}
+							<td><input type="submit" value="update"></td>
+						</form>
+						<form action="/delete" method="post">
+							<td>
+								<input type="hidden" name="name" value="{{.Name}}">
+								<input type="submit" value="delete">
+							</td>
+						</form>
+					</tr>
+					{{ end }}
+				</table>
+				<input type="submit" value="update" />
+			</details>
+			<h1>New</h1>
+			<form action="/new" method="post">
+				<input type="text" name="name" placeholder="Name" />
+				{{ $indZero := index . 0 }}
+				{{range $key, $value := $indZero.Activities }}
+				<input type="text" name="{{$key}}" placeholder="{{$key}}" />
+				{{ end }}
+				<input type="submit" value="insert new member" />
+			</form>
+		</main>
+	</body>
+</html>
