@@ -127,3 +127,28 @@ func DeleteMembers(conn *grpc.ClientConn, members []*pb.DeleteRequest) (ret *pb.
 	}
 	return
 }
+
+// AddColumns asks the server to add the given keys to all documents in the collection
+func AddColumns(conn *grpc.ClientConn, keys []string) (ret *pb.ActivityResponse, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	client := pb.NewActivityServiceClient(conn)
+
+	stream, err := client.AddColumns(ctx)
+	if err != nil {
+		return
+	}
+
+	for _, v := range keys {
+
+		if err = stream.Send(&pb.ColRequest{Key: v}); err != nil {
+			return
+		}
+	}
+	ret, err = stream.CloseAndRecv()
+	if err != nil {
+		return
+	}
+	return
+}

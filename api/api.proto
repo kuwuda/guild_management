@@ -16,6 +16,15 @@ message ActivityItem {
 	map<string, uint32> activities = 2;
 }
 
+message NameVal {
+	string name = 1;
+	uint32 val = 2;
+}
+
+message ColRequest {
+	string key = 1;
+}
+
 message ActivityKeys {
 	repeated string keys = 1;
 }
@@ -31,5 +40,6 @@ service ActivityService {
 	rpc WriteMembers(stream ActivityItem) returns (ActivityResponse) {}
 	rpc UpdateMembers(stream ActivityItem) returns (ActivityResponse) {}
 	rpc DeleteMembers(stream DeleteRequest) returns (ActivityResponse) {}
+	rpc AddColumns(stream ColRequest) returns (ActivityResponse) {}
 	rpc GetKeys(KeyRequest) returns (ActivityKeys) {}
 }

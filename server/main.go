@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"sort"
+	"strings"
 	"time"
 
 	pb "github.com/kuwuda/guild_management/api"
@@ -234,6 +235,52 @@ func (s *server) WriteMembers(stream pb.ActivityService_WriteMembersServer) erro
 			return err
 		}
 		entries++
+	}
+}
+
+// It's interesting that I'm essentially writing functions to enforce a schema on a schema-less database
+// I'm not really sure if there's a better way to do this
+// Perhaps mongodb wasn't really the right choice for this
+// Or maybe there's a better way to do this.
+func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
+	var entries uint32
+	startTime := time.Now()
+
+	collection := s.mongoClient.Database("test").Collection("activity")
+
+	for {
+		entry, err := stream.Recv()
+		if err == io.EOF {
+			endTime := time.Now()
+			return stream.SendAndClose(&pb.ActivityResponse{
+				Entries:     entries,
+				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+			})
+		}
+		if err != nil {
+			return err
+		}
+
+		keys, err := getKeys(collection)
+		if err != nil {
+			return err
+		}
+
+		// Not sure if exiting the function like this is the proper way to handle this error
+		for _, v := range keys {
+			if strings.EqualFold(v, entry.Key) {
+				return errors.New("entry already exists")
+			}
+		}
+
+		// This is disgusting
+		res, err := collection.UpdateMany(context.Background(), bson.D{}, bson.D{
+			primitive.E{Key: "$set", Value: bson.M{"activities." + entry.Key: 0}}})
+		if err != nil {
+			return err
+		}
+
+		entries += uint32(res.ModifiedCount)
 	}
 }
 
