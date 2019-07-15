@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title></title>
+		<title>Guild Manager</title>
 		<meta charset="UTF-8">
 		<link rel="shortcut icon" href="/static/favicon.png">
 		<link rel="stylesheet" href="/static/index.css">
@@ -52,16 +52,20 @@
 					</tr>
 					{{ end }}
 				</table>
-				<input type="submit" value="update" />
 			</details>
-			<h1>New</h1>
-			<form action="/new" method="post">
+			<h1>New Row</h1>
+			<form action="/row" method="post">
 				<input type="text" name="name" placeholder="Name" />
 				{{ $indZero := index . 0 }}
 				{{range $key, $value := $indZero.Activities }}
 				<input type="text" name="{{$key}}" placeholder="{{$key}}" />
 				{{ end }}
 				<input type="submit" value="insert new member" />
+			</form>
+			<h1>New Col</h1>
+			<form action="/col" method="post">
+				<input type="text" name="key" placeholder="Column Name" />
+				<input type="submit" value="insert new column" />
 			</form>
 		</main>
 	</body>

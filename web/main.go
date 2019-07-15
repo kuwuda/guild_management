@@ -81,7 +81,23 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", 301)
 }
 
-func newHandler(w http.ResponseWriter, r *http.Request) {
+func colHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	key := r.FormValue("key")
+	var keys []string
+
+	keys = append(keys, key)
+	resp, err := client.AddColumns(conn, keys)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	log.Println(resp)
+
+	http.Redirect(w, r, "/", 301)
+}
+
+func rowHandler(w http.ResponseWriter, r *http.Request) {
 	keys, err := client.GetKeys(conn)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -145,11 +161,15 @@ func main() {
 	m.AddFunc("application/x-javascript", js.Minify)
 	m.AddFunc("application/javascript", js.Minify)
 
-	fs := http.FileServer(http.Dir("static/"))
+	fs := http.FileServer(http.Dir("web/static/"))
 	http.Handle("/static/", m.Middleware(http.StripPrefix("/static/", fs)))
+
+	// REST api
 	http.HandleFunc("/delete", deleteHandler)
 	http.HandleFunc("/update", updateHandler)
-	http.HandleFunc("/new", newHandler)
+	http.HandleFunc("/col", colHandler)
+	http.HandleFunc("/row", rowHandler)
+
 	http.HandleFunc("/", indexHandler)
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
