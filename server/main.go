@@ -273,7 +273,8 @@ func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
 			}
 		}
 
-		// This is disgusting
+		// This is disgusting. Not sure if this is like vulnerable to something similar to SQL injection either.
+		// Will have to test
 		res, err := collection.UpdateMany(context.Background(), bson.D{}, bson.D{
 			primitive.E{Key: "$set", Value: bson.M{"activities." + entry.Key: 0}}})
 		if err != nil {
@@ -284,9 +285,47 @@ func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
 	}
 }
 
-func (s *server) GetActivities(args *pb.ActivityRequest, stream pb.ActivityService_GetActivitiesServer) error {
-	log.Printf("Received: %v", args)
+func (s *server) IncrementActivities(stream pb.ActivityService_IncrementActivitiesServer) error {
+	var entries uint32
+	startTime := time.Now()
 
+	collection := s.mongoClient.Database("test").Collection("activity")
+
+	for {
+		entry, err := stream.Recv()
+		if err == io.EOF {
+			endTime := time.Now()
+			return stream.SendAndClose(&pb.ActivityResponse{
+				Entries:     entries,
+				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+			})
+		}
+		if err != nil {
+			return err
+		}
+
+		var names bson.A
+		for _, v := range entry.Names {
+			name := bson.D{primitive.E{Key: "name", Value: v}}
+			names = append(names, name)
+		}
+
+		collation := options.Collation{Locale: "en", Strength: 2}
+		options := options.Update().SetCollation(&collation)
+
+		filter := bson.D{primitive.E{Key: "$or", Value: names}}
+		fmt.Println(filter)
+		update := bson.D{primitive.E{Key: "$inc", Value: bson.M{"activities." + entry.Key: entry.Amount}}}
+		res, err := collection.UpdateMany(context.Background(), filter, update, options)
+		if err != nil {
+			return err
+		}
+
+		entries += uint32(res.ModifiedCount)
+	}
+}
+
+func (s *server) GetActivities(args *pb.ActivityRequest, stream pb.ActivityService_GetActivitiesServer) error {
 	collection := s.mongoClient.Database("test").Collection("activity")
 
 	filter := make(bson.M)

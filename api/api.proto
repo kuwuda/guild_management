@@ -25,6 +25,12 @@ message ColRequest {
 	string key = 1;
 }
 
+message IncRequest {
+	uint32 amount = 1;
+	string key = 2;
+	repeated string names = 3;
+}
+
 message ActivityKeys {
 	repeated string keys = 1;
 }
@@ -41,5 +47,6 @@ service ActivityService {
 	rpc UpdateMembers(stream ActivityItem) returns (ActivityResponse) {}
 	rpc DeleteMembers(stream DeleteRequest) returns (ActivityResponse) {}
 	rpc AddColumns(stream ColRequest) returns (ActivityResponse) {}
+	rpc IncrementActivities(stream IncRequest) returns (ActivityResponse) {}
 	rpc GetKeys(KeyRequest) returns (ActivityKeys) {}
 }
