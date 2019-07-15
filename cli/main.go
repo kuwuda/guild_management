@@ -214,6 +214,41 @@ func sendToServer(conn *grpc.ClientConn, input []string) error {
 		fmt.Println(resp)
 		fmt.Println(err)
 	}
+	if input[0] == "newColumn" {
+		opts, _, err := getopt.Getopts(input, "h")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var help strings.Builder
+		help.WriteString("usage: newColumn [options] key")
+		help.WriteString("\nWhere key is the name of the column being created\n" +
+			"EX:\n" +
+			"newColumn Cats\n")
+		help.WriteString("Options:\n " +
+			"-h Prints this message")
+
+		// get specified arguments
+		if len(input) > 1 {
+			for _, opt := range opts {
+				switch opt.Option {
+				case 'h':
+					fmt.Println(help.String())
+					return nil
+				}
+			}
+		} else {
+			fmt.Println(help.String())
+			return nil
+		}
+		key := input[1]
+		var keys []string
+		keys = append(keys, key)
+
+		resp, err := client.AddColumns(conn, keys)
+		fmt.Println(resp)
+		fmt.Println(err)
+	}
 
 	return nil
 }
