@@ -330,7 +330,6 @@ func (s *server) IncrementActivities(stream pb.ActivityService_IncrementActiviti
 		options := options.Update().SetCollation(&collation)
 
 		filter := bson.D{primitive.E{Key: "$or", Value: names}}
-		fmt.Println(filter)
 		update := bson.D{primitive.E{Key: "$inc", Value: bson.M{"activities." + entry.Key: entry.Amount}}}
 		res, err := collection.UpdateMany(context.Background(), filter, update, options)
 		if err != nil {
@@ -375,7 +374,6 @@ func (s *server) GetActivities(args *pb.ActivityRequest, stream pb.ActivityServi
 	}
 
 	for _, v := range activityHolder {
-		fmt.Println(v)
 		if err := stream.Send(v); err != nil {
 			return err
 		}
