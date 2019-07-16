@@ -304,6 +304,22 @@ func (s *server) IncrementActivities(stream pb.ActivityService_IncrementActiviti
 			return err
 		}
 
+		keys, err := getKeys(collection)
+		if err != nil {
+			return err
+		}
+
+		var exists bool
+		for _, v := range keys {
+			if entry.Key == v {
+				exists = true
+			}
+		}
+
+		if !exists {
+			return errors.New("key " + entry.Key + " does not exist")
+		}
+
 		var names bson.A
 		for _, v := range entry.Names {
 			name := bson.D{primitive.E{Key: "name", Value: v}}
