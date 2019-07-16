@@ -152,6 +152,31 @@ func AddColumns(conn *grpc.ClientConn, keys []string) (ret *pb.ActivityResponse,
 	return
 }
 
+// DeleteColumns asks the server to delete the given keys from all documents in the collection
+func DeleteColumns(conn *grpc.ClientConn, keys []string) (ret *pb.ActivityResponse, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	client := pb.NewActivityServiceClient(conn)
+
+	stream, err := client.DeleteColumns(ctx)
+	if err != nil {
+		return
+	}
+
+	for _, v := range keys {
+		if err = stream.Send(&pb.ColRequest{Key: v}); err != nil {
+			return
+		}
+	}
+	ret, err = stream.CloseAndRecv()
+	if err != nil {
+		return
+	}
+	return
+
+}
+
 // IncrementActivities requests the server to increment the activities provided in reqs
 func IncrementActivities(conn *grpc.ClientConn, reqs []*pb.IncRequest) (ret *pb.ActivityResponse, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)

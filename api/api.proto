@@ -47,6 +47,7 @@ service ActivityService {
 	rpc UpdateMembers(stream ActivityItem) returns (ActivityResponse) {}
 	rpc DeleteMembers(stream DeleteRequest) returns (ActivityResponse) {}
 	rpc AddColumns(stream ColRequest) returns (ActivityResponse) {}
+	rpc DeleteColumns(stream ColRequest) returns (ActivityResponse) {}
 	rpc IncrementActivities(stream IncRequest) returns (ActivityResponse) {}
 	rpc GetKeys(KeyRequest) returns (ActivityKeys) {}
 }

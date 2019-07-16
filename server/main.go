@@ -242,6 +242,37 @@ func (s *server) WriteMembers(stream pb.ActivityService_WriteMembersServer) erro
 // I'm not really sure if there's a better way to do this
 // Perhaps mongodb wasn't really the right choice for this
 // Or maybe there's a better way to do this.
+func (s *server) DeleteColumns(stream pb.ActivityService_DeleteColumnsServer) error {
+	var entries uint32
+	startTime := time.Now()
+
+	collection := s.mongoClient.Database("test").Collection("activity")
+
+	for {
+		entry, err := stream.Recv()
+		if err == io.EOF {
+			endTime := time.Now()
+			return stream.SendAndClose(&pb.ActivityResponse{
+				Entries:     entries,
+				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+			})
+		}
+		if err != nil {
+			return err
+		}
+
+		// This is disgusting. Not sure if this is like vulnerable to something similar to SQL injection either.
+		// Will have to test
+		res, err := collection.UpdateMany(context.Background(), bson.D{}, bson.D{
+			primitive.E{Key: "$unset", Value: bson.M{"activities." + entry.Key: 0}}})
+		if err != nil {
+			return err
+		}
+
+		entries += uint32(res.ModifiedCount)
+	}
+}
+
 func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
 	var entries uint32
 	startTime := time.Now()

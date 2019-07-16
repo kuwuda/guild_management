@@ -18,7 +18,7 @@ func getHelp(command string, keys []string) (string, error) {
 			"If no options are input, will default to returning every user.")
 		return help.String(), nil
 	case "adduser":
-		help.WriteString("usage: newActivityMember [options] name ")
+		help.WriteString("usage: " + command + " [options] name ")
 		for _, v := range keys {
 			help.WriteRune('"')
 			help.WriteString(v)
@@ -27,25 +27,33 @@ func getHelp(command string, keys []string) (string, error) {
 		}
 		help.WriteString("\nWhere name etc. is replaced with the value for the input\n" +
 			"EX:\n" +
-			"newActivityMember Apples 4 8\n")
+			command + " Apples 4 8\n")
 		help.WriteString("Any non-specified values will default to 0\n Extraneous values are ignored")
 		help.WriteString("Options:\n " +
 			"-h Prints this message")
 		return help.String(), nil
 	case "addcol":
-		help.WriteString("usage: newColumn [options] key")
+		help.WriteString("usage: " + command + " [options] key")
 		help.WriteString("\nWhere key is the name of the column being created\n" +
 			"EX:\n" +
-			"newColumn Cats\n")
+			command + " Cats\n")
+		help.WriteString("Options:\n " +
+			"-h Prints this message")
+		return help.String(), nil
+	case "delcol":
+		help.WriteString("usage: " + command + " [options] key")
+		help.WriteString("\nWhere key is the name of the column being deleted\n" +
+			"EX:\n" +
+			command + " Cats\n")
 		help.WriteString("Options:\n " +
 			"-h Prints this message")
 		return help.String(), nil
 	case "incact":
-		help.WriteString("usage: incActivity [options] activity members")
+		help.WriteString("usage: incact [options] activity members")
 		help.WriteString("\nWhere activity is the name of the activity being incremented, and" +
 			"members is the total list of users who are to be incremented\n" +
 			"EX:\n" +
-			"incActivity -n 4 kraken kusu apples tyny\n" +
+			command + " -n 4 kraken kusu apples tyny\n" +
 			"Would increase the activity \"kraken\" for all users by 4")
 		help.WriteString("Options:\n " +
 			"-h Prints this message\n" +

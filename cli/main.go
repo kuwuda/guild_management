@@ -45,6 +45,13 @@ func processCommand(conn *grpc.ClientConn, input []string) error {
 		}
 		return nil
 	}
+	if input[0] == "delcol" {
+		err := commands.DelCol(conn, input)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 	if input[0] == "incact" {
 		err := commands.IncAct(conn, input)
 		if err != nil {
