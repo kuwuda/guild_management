@@ -8,7 +8,7 @@ message ActivityRequest {
 
 message ActivityResponse {
 	uint32 entries = 1;
-	int32 elapsed_time = 2;
+	double elapsed_time = 2;
 }
 
 message ActivityItem {

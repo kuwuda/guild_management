@@ -111,7 +111,7 @@ func (s *server) DeleteMembers(stream pb.ActivityService_DeleteMembersServer) er
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
@@ -146,7 +146,7 @@ func (s *server) UpdateMembers(stream pb.ActivityService_UpdateMembersServer) er
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
@@ -198,7 +198,7 @@ func (s *server) WriteMembers(stream pb.ActivityService_WriteMembersServer) erro
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
@@ -254,7 +254,7 @@ func (s *server) DeleteColumns(stream pb.ActivityService_DeleteColumnsServer) er
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
@@ -285,7 +285,7 @@ func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
@@ -328,7 +328,7 @@ func (s *server) IncrementActivities(stream pb.ActivityService_IncrementActiviti
 			endTime := time.Now()
 			return stream.SendAndClose(&pb.ActivityResponse{
 				Entries:     entries,
-				ElapsedTime: int32(endTime.Sub(startTime).Seconds()),
+				ElapsedTime: endTime.Sub(startTime).Seconds(),
 			})
 		}
 		if err != nil {
