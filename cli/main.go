@@ -24,35 +24,38 @@ func processCommand(conn *grpc.ClientConn, input []string) error {
 		return errors.New("empty slice")
 	}
 
-	if input[0] == "gettable" {
+	switch input[0] {
+	case "gettable":
 		err := commands.GetTable(conn, input)
 		if err != nil {
 			return err
 		}
 		return nil
-	}
-	if input[0] == "adduser" {
+	case "adduser":
 		err := commands.AddUser(conn, input)
 		if err != nil {
 			return err
 		}
 		return nil
-	}
-	if input[0] == "addcol" {
+	case "deluser":
+		err := commands.DelUser(conn, input)
+		if err != nil {
+			return err
+		}
+		return nil
+	case "addcol":
 		err := commands.AddCol(conn, input)
 		if err != nil {
 			return err
 		}
 		return nil
-	}
-	if input[0] == "delcol" {
+	case "delcol":
 		err := commands.DelCol(conn, input)
 		if err != nil {
 			return err
 		}
 		return nil
-	}
-	if input[0] == "incact" {
+	case "incact":
 		err := commands.IncAct(conn, input)
 		if err != nil {
 			return err

@@ -22,9 +22,6 @@ func AddUser(conn *grpc.ClientConn, in []string) error {
 		return err
 	}
 
-	// Not really a fan of initializing this when it isn't used
-	// But even less of a fan of doing it twice
-	// Probably a better solution
 	var parsed []string
 	// get specified arguments
 	if len(in) > 1 {

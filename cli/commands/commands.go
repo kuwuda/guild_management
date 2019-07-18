@@ -32,6 +32,14 @@ func getHelp(command string, keys []string) (string, error) {
 		help.WriteString("Options:\n " +
 			"-h Prints this message")
 		return help.String(), nil
+	case "deluser":
+		help.WriteString("usage: " + command + " [options] name\n")
+		help.WriteString("Where name is the name of the user you wish to delete.\n" +
+			"EX:\n" +
+			command + " Tyny\n")
+		help.WriteString("Options:\n" +
+			"-h Prints this message")
+		return help.String(), nil
 	case "addcol":
 		help.WriteString("usage: " + command + " [options] key")
 		help.WriteString("\nWhere key is the name of the column being created\n" +
