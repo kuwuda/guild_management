@@ -19,7 +19,7 @@ func AddUser(conn *grpc.ClientConn, in []string) error {
 
 	keys, err := client.GetKeys(conn)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	// Not really a fan of initializing this when it isn't used
