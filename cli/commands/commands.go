@@ -50,7 +50,7 @@ func getHelp(command string, keys []string) (string, error) {
 		help.WriteString("\nWhere name etc. is replaced with the value for the input\n" +
 			"EX:\n" +
 			command + " Apples 4 8\n")
-		help.WriteString("Any non-specified values will default to 0\n Extraneous values are ignored")
+		help.WriteString("Any non-specified values will default to 0\n Extraneous values are ignored\n")
 		help.WriteString("Options:\n " +
 			"-h Prints this message")
 		return help.String(), nil

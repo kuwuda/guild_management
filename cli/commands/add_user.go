@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	"git.sr.ht/~sircmpwn/getopt"
@@ -21,6 +22,8 @@ func AddUser(conn *grpc.ClientConn, in []string) error {
 	if err != nil {
 		return err
 	}
+
+	sort.Strings(keys)
 
 	var parsed []string
 	// get specified arguments
