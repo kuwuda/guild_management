@@ -125,9 +125,13 @@ func (s *server) DeleteMembers(stream pb.ActivityService_DeleteMembersServer) er
 
 		// Not sure what I should be doing with the DB's responses
 		// Is discarding them like this fine?
-		_, err = collection.DeleteOne(context.Background(), filter, options)
+		res, err := collection.DeleteOne(context.Background(), filter, options)
 		if err != nil {
 			return err
+		}
+
+		if res.DeletedCount == 0 {
+			return errors.New("no entries deleted")
 		}
 
 		entries++
@@ -259,6 +263,21 @@ func (s *server) DeleteColumns(stream pb.ActivityService_DeleteColumnsServer) er
 		}
 		if err != nil {
 			return err
+		}
+
+		keys, err := getKeys(collection)
+		if err != nil {
+			return err
+		}
+
+		var exists bool
+		for _, v := range keys {
+			if strings.EqualFold(v, entry.Key) {
+				exists = true
+			}
+		}
+		if !exists {
+			return errors.New("entry does not exist")
 		}
 
 		// This is disgusting. Not sure if this is like vulnerable to something similar to SQL injection either.
