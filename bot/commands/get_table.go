@@ -2,6 +2,7 @@ package commands
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -76,6 +77,9 @@ func GetTable(conn *grpc.ClientConn, in []string) (string, error) {
 	for k := range activities[0].Activities {
 		keys = append(keys, k)
 	}
+
+	// sort keys to avoid randomness in order
+	sort.Strings(keys[1:])
 
 	// since the way ranges iterate on maps is non-deterministic, store each row in a slice of string slices instead
 	var rows [][]string

@@ -28,13 +28,55 @@ var (
 	prefix = "!"
 )
 
+// Check for quoted terms in a given byte slice, also sorts byte slice into a slice of strings
+// Does not currently support escaping quotes. \" is still treated as a quote
+// This is a very poor implementation of this, currently leading characters that are coupled with a quote, like
+// aaaaaa"cats are cute" are ignored, and trailing characters ("cats are cute"aaaa) are added into ret
+// There's a much better way to do this, fix later
+func splitQuotes(in []byte) (ret []string, err error) {
+	var inquote bool
+	var n int
+	for i := 0; i != len(in); i++ {
+		if in[i] == '"' {
+			if inquote {
+				inquote = false
+			} else {
+				n = i + 1
+				inquote = true
+			}
+		} else if !inquote && in[i] == ' ' {
+			if i != 0 && in[i-1] == '"' {
+				ret = append(ret, string(in[n:i-1]))
+			} else {
+				ret = append(ret, string(in[n:i]))
+			}
+			n = i + 1
+		}
+	}
+	if inquote {
+		return nil, errors.New("error: unterminated quote")
+	}
+
+	if in[len(in)-1] == '"' {
+		ret = append(ret, string(in[n:len(in)-1]))
+	} else {
+		ret = append(ret, string(in[n:]))
+	}
+
+	return
+}
+
 func parseCommand(content string) (args []string, err error) {
 	if !strings.HasPrefix(content, prefix) {
 		err = errors.New("string does not contain prefix")
 		return
 	}
+
+	// removes prefix from command
 	content = strings.TrimPrefix(content, prefix)
-	args = strings.Split(content, " ")
+	// removes multiple instances of whitespace
+	content = strings.Join(strings.Fields(strings.TrimSpace(content)), " ")
+	args, err = splitQuotes([]byte(content))
 	return
 }
 
