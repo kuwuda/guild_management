@@ -1,14 +1,34 @@
 package commands
 
 import (
+	"fmt"
 	"strings"
 )
+
+// GetHelp prints a help string detailing all the commands
+func GetHelp() error {
+	s, err := getHelp("help", nil)
+	if err != nil {
+		return err
+	}
+	fmt.Println(s)
+	return nil
+}
 
 // I really am not sure what a good way to do all this stuff is
 func getHelp(command string, keys []string) (string, error) {
 	var help strings.Builder
 
 	switch command {
+	case "help":
+		help.WriteString("Currently supported commands:\n" +
+			"gettable: gets the current table from the database\n" +
+			"adduser: adds a user to the database\n" +
+			"deluser: deletes a user from the database\n" +
+			"addcol: adds a key/column to the database\n" +
+			"delcol: deletes a column from the database\n" +
+			"incact: increments an activity for the provided users")
+		return help.String(), nil
 	case "gettable":
 		help.WriteString("usage: " + command + " [options]\n")
 		help.WriteString("Options:\n")

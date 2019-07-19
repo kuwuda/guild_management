@@ -25,6 +25,12 @@ func processCommand(conn *grpc.ClientConn, input []string) error {
 	}
 
 	switch input[0] {
+	case "help":
+		err := commands.GetHelp()
+		if err != nil {
+			return err
+		}
+		return nil
 	case "gettable":
 		err := commands.GetTable(conn, input)
 		if err != nil {
