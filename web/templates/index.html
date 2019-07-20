@@ -7,32 +7,18 @@
 	</head>
 	<body>
 		<main>
-			<table>
-				<tr>
-					<th>Name</th>
-					{{ $indZero := index . 0}}
-					{{ range $key, $value := $indZero.Activities }}
-					<th>{{$key}}</th>
-					{{ end }}
-				</tr>
-				{{ range . }}
-				<tr>
-					<td>{{ .Name }}</td>
-					{{range $value := .Activities }}
-					<td>{{$value}}</td>
-					{{ end }}
-				</tr>
-				{{ end }}
-			</table>
-			<details>
-				<summary>Update</summary>
+			<div>
 				<table>
 					<tr>
 						<th>Name</th>
 						{{ $indZero := index . 0}}
 						{{ range $key, $value := $indZero.Activities }}
-						<th>{{$key}}</th>
+						<th>
+							{{$key}}
+						</th>
 						{{ end }}
+						<th></th>
+						<th></th>
 					</tr>
 					{{ range . }}
 					<tr>
@@ -52,21 +38,25 @@
 					</tr>
 					{{ end }}
 				</table>
+			</div>
+			<details>
+				<summary>New Row</summary>
+				<form action="/row" method="post">
+					<input type="text" name="name" placeholder="Name" />
+					{{ $indZero := index . 0 }}
+					{{range $key, $value := $indZero.Activities }}
+					<input type="text" name="{{$key}}" placeholder="{{$key}}" />
+					{{ end }}
+					<input type="submit" value="insert new member" />
+				</form>
 			</details>
-			<h1>New Row</h1>
-			<form action="/row" method="post">
-				<input type="text" name="name" placeholder="Name" />
-				{{ $indZero := index . 0 }}
-				{{range $key, $value := $indZero.Activities }}
-				<input type="text" name="{{$key}}" placeholder="{{$key}}" />
-				{{ end }}
-				<input type="submit" value="insert new member" />
-			</form>
-			<h1>New Col</h1>
-			<form action="/col" method="post">
-				<input type="text" name="key" placeholder="Column Name" />
-				<input type="submit" value="insert new column" />
-			</form>
+			<details>
+				<summary>New Col</summary>
+				<form action="/col" method="post">
+					<input type="text" name="key" placeholder="Column Name" />
+					<input type="submit" value="insert new column" />
+				</form>
+			</details>
 		</main>
 	</body>
 </html>
