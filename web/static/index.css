@@ -1,0 +1,60 @@
+body {
+	margin: 0;
+	background-color: #1a1a1a;
+	color: #bcbcbc;
+	font-family: sans-serif;
+}
+
+a {
+	color: #fff;
+	text-decoration: none;
+}
+
+summary,
+details,
+form {
+	cursor: pointer;
+}
+
+form {
+	display: inline;
+}
+
+table {
+	margin: 0 auto;
+}
+
+input[type=text],
+input[type=password] {
+	padding: 0;
+	margin: 0;
+	color: #fff;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #9e9e9e;
+	outline: none;
+	height: 20px;
+	position: relative;
+	left: 0;
+	font-size: 16px;
+}
+
+input[type=button],
+input[type=submit] {
+	margin: 0 2px 0 0;
+	height: 26px;
+	padding: 0 4px;
+	border: none;
+	outline: 0;
+	color: #fff;
+	background-color: #c8147a;
+	text-align: center;
+	letter-spacing: 0.5px;
+	cursor: pointer;
+}
+
+main {
+	margin-left: 15%;
+	margin-right: 15%;
+	font-size: 14px;
+}
