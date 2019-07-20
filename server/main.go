@@ -84,6 +84,17 @@ func getKeys(col *mongo.Collection) ([]string, error) {
 	return parseKeys(data), nil
 }
 
+func checkInvalidChars(s string) bool {
+	if s[0] == '$' {
+		return true
+	}
+	if strings.ContainsRune(s, '.') {
+		return true
+	}
+
+	return false
+}
+
 func (s *server) GetKeys(ctx context.Context, req *pb.KeyRequest) (ret *pb.ActivityKeys, err error) {
 	collection := s.mongoClient.Database("test").Collection("activity")
 	keys, err := getKeys(collection)
@@ -309,6 +320,10 @@ func (s *server) AddColumns(stream pb.ActivityService_AddColumnsServer) error {
 		}
 		if err != nil {
 			return err
+		}
+
+		if checkInvalidChars(entry.Key) {
+			return errors.New("keys cannot contain '.' or have '$' at the start")
 		}
 
 		keys, err := getKeys(collection)
