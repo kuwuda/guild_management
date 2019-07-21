@@ -29,7 +29,7 @@ func getHelp(command string, keys []string) (string, error) {
 			"delcol: deletes a column from the database\n" +
 			"incact: increments an activity for the provided users\n")
 		help.WriteString("Add -h as an option to any command to get help with it! (EX: " +
-			"gettable -h")
+			"gettable -h)")
 		return help.String(), nil
 	case "gettable":
 		help.WriteString("usage: " + command + " [options]\n")
