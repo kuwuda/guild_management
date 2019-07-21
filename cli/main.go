@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kuwuda/guild_management/cli/commands"
+	"github.com/kuwuda/guild_management/client/commands"
 	"google.golang.org/grpc"
 )
 
@@ -76,45 +76,64 @@ func processCommand(conn *grpc.ClientConn, in string) error {
 
 	switch input[0] {
 	case "help":
-		err := commands.GetHelp()
+		out, err := commands.GetHelp()
 		if err != nil {
 			return err
 		}
+		fmt.Println(out)
 		return nil
 	case "gettable":
-		err := commands.GetTable(conn, input)
+		out, err := commands.GetTable(conn, input)
 		if err != nil {
 			return err
+		}
+		if out != "" {
+			fmt.Println(out)
 		}
 		return nil
 	case "adduser":
-		err := commands.AddUser(conn, input)
+		out, err := commands.AddUser(conn, input)
 		if err != nil {
 			return err
+		}
+		if out != "" {
+			fmt.Println(out)
 		}
 		return nil
 	case "deluser":
-		err := commands.DelUser(conn, input)
+		out, err := commands.DelUser(conn, input)
 		if err != nil {
 			return err
+		}
+		if out != "" {
+			fmt.Println(out)
 		}
 		return nil
 	case "addcol":
-		err := commands.AddCol(conn, input)
+		out, err := commands.AddCol(conn, input)
 		if err != nil {
 			return err
+		}
+		if out != "" {
+			fmt.Println(out)
 		}
 		return nil
 	case "delcol":
-		err := commands.DelCol(conn, input)
+		out, err := commands.DelCol(conn, input)
 		if err != nil {
 			return err
 		}
+		if out != "" {
+			fmt.Println(out)
+		}
 		return nil
 	case "incact":
-		err := commands.IncAct(conn, input)
+		out, err := commands.IncAct(conn, input)
 		if err != nil {
 			return err
+		}
+		if out != "" {
+			fmt.Println(out)
 		}
 		return nil
 	}

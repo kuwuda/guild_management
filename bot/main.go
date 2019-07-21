@@ -13,7 +13,7 @@ import (
 	//"time"
 
 	//pb "github.com/kuwuda/guild_management/api"
-	"github.com/kuwuda/guild_management/bot/commands"
+	"github.com/kuwuda/guild_management/client/commands"
 	"google.golang.org/grpc"
 )
 
